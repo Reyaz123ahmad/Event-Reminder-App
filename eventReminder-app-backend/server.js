@@ -36,6 +36,7 @@ app.use(cors({
     'http://localhost:5177',
     'https://localhost:5173',
     'https://localhost:5177',
+    'https://event-reminder-app-seven.vercel.app'
     
   ],
   credentials: true
