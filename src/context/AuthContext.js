@@ -52,8 +52,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await authAPI.signup(userData);
       if (result.success) {
-        setUser(result.data.user);
-        setToken(result.data.token);
+        // setUser(result.data.user);
+        // setToken(result.data.token);
         return { 
           success: true,
           data: result.data

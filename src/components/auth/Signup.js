@@ -50,6 +50,8 @@ const Signup = ({ onToggleMode }) => {
     
     if (!result.success) {
       setError(result.message);
+    }else{
+      onToggleMode()
     }
     
     setLoading(false);
