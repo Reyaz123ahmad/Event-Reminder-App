@@ -1,17 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Clock, Trash2, Edit, CheckCircle } from 'lucide-react';
-import { formatDate, getTimeRemaining } from '../../utils/helpers.js';
+import { formatExactDateTime, getTimeRemaining, isEventCompleted } from '../../utils/helpers.js';
 import { EVENT_STATUS, DEFAULT_EVENT_IMAGE } from '../../utils/constants.js';
 
 const EventCard = ({ event, onEdit, onDelete }) => {
   const isUpcoming = event.status === EVENT_STATUS.UPCOMING;
   const isCompleted = event.status === EVENT_STATUS.COMPLETED;
-
-  
-  const now = new Date();
-  const eventDate = new Date(event.date);
-  const isActuallyCompleted = eventDate < now;
+  const isActuallyCompleted = isEventCompleted(event.date);
 
   return (
     <motion.div
@@ -73,9 +69,14 @@ const EventCard = ({ event, onEdit, onDelete }) => {
         )}
 
         <div className="space-y-2 mb-4">
-          <div className="flex items-center text-gray-600">
-            <Calendar size={16} className="mr-2" />
-            <span className="text-sm">{formatDate(event.date)}</span>
+          <div className="flex items-start text-gray-600">
+            <Calendar size={16} className="mr-2 mt-1 flex-shrink-0" />
+            <div>
+              
+              <span className="text-sm font-medium">Scheduled for:</span>
+              <br />
+              <span className="text-sm">{formatExactDateTime(event.date)}</span>
+            </div>
           </div>
 
           {event.location && (
@@ -99,6 +100,8 @@ const EventCard = ({ event, onEdit, onDelete }) => {
             </div>
           )}
         </div>
+
+
 
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           {event.category && (

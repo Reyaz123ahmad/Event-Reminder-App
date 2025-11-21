@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EVENT_CATEGORIES } from '../../utils/constants.js';
-import { validateEvent } from '../../utils/helpers.js';
+import { toLocalDateTimeString, toISODateTimeString, validateEvent } from '../../utils/helpers.js';
 import Button from '../ui/Button.js';
 
 const EventForm = ({ isOpen, onClose, onSubmit, event, loading }) => {
@@ -15,7 +15,6 @@ const EventForm = ({ isOpen, onClose, onSubmit, event, loading }) => {
   });
   const [errors, setErrors] = useState({});
 
-  
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -29,10 +28,13 @@ const EventForm = ({ isOpen, onClose, onSubmit, event, loading }) => {
 
   useEffect(() => {
     if (event) {
+      
+      const localDateTime = toLocalDateTimeString(event.date);
+      
       setFormData({
         title: event.title || '',
         description: event.description || '',
-        date: event.date ? new Date(event.date).toISOString().slice(0, 16) : '',
+        date: localDateTime,
         imageFile: null,
         image: event.image || '',
         location: event.location || '',
@@ -68,21 +70,26 @@ const EventForm = ({ isOpen, onClose, onSubmit, event, loading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     const validationErrors = validateEvent(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    const data = new FormData()
-    data.append("title", formData.title)
-    data.append("description", formData.description);
-    data.append("date", formData.date);
-    data.append("location", formData.location);
-    data.append("category", formData.category);
-    if(formData.imageFile){
-      data.append("image", formData.imageFile)
+
+    
+    const submitData = new FormData();
+    submitData.append("title", formData.title);
+    submitData.append("description", formData.description);
+    submitData.append("date", toISODateTimeString(formData.date));
+    submitData.append("location", formData.location);
+    submitData.append("category", formData.category);
+    
+    if (formData.imageFile) {
+      submitData.append("image", formData.imageFile);
     }
-    onSubmit(data);
+
+    onSubmit(submitData);
   };
 
   return (
@@ -213,7 +220,7 @@ const EventForm = ({ isOpen, onClose, onSubmit, event, loading }) => {
 
               <div>
                 <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
-                  Image URL
+                  Image
                 </label>
                 <input
                   type="file"

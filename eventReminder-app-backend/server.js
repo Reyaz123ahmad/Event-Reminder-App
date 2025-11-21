@@ -23,24 +23,7 @@ database.connect();
 
 //Security middleware
 app.use(helmet());
-// app.use(cors({
-//   origin: [
-//     'http://localhost:3000',
-//     'http://localhost:3001',
-//     'http://localhost:3002',
-//     'http://localhost:3003',
-//     'http://localhost:3004',
-//     'http://localhost:3005',
-//     'http://localhost:5174',
-//     'http://localhost:5175',
-//     'http://localhost:5177',
-//     'https://localhost:5173',
-//     'https://localhost:5177',
-//     'https://event-reminder-app-seven.vercel.app'
-    
-//   ],
-//   credentials: true
-// }));
+
 
 const allowedOrigins = [
   'http://localhost:3000',
